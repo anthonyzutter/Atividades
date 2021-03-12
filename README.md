@@ -1,6 +1,6 @@
 # Atividades
 
-![Imagem 1](ex1.png)
-![Imagem 2](ex2.png)
-![Imagem 3](ex3.png)
+![Imagem 1](Ex1.png)
+![Imagem 2](Ex2.png)
+![Imagem 3](Ex3.png)
 
