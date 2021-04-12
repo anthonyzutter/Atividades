@@ -5,3 +5,5 @@
 ![Imagem 2](Img/Ex2.png)
 ### 3.
 ![Imagem 3](Img/Ex3.png)
+### 4.
+![Imagem 4](Img/Ex4.png)
