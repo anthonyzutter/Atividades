@@ -1,0 +1,8 @@
+# Atividades
+### 1.
+![Imagem 1](Img/Ex1.png)
+### 2. 
+![Imagem 2](Img/Ex2.png)
+### 3.
+![Imagem 3](Img/Ex3.png)
+
