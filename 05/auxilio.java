@@ -5,13 +5,20 @@ import java.time.LocalDate;
 
 public class auxilio {
     private static double valorTotal = 0;
+    private static int totalBeneficiarios = 0;
+    private static double maiorBeneficiario1 = 0;
+    private static double maiorBeneficiario2 = 0;
+    private static String nomeMaiorBeneficiario1 = " ";
+    private static String nomeMaiorBeneficiario2 = " ";
+
     public static void main(String[] args) {
         String nomeCompleto, categoria, estado;
-        int mesesDeAuxilio, dataNascimento;
-        int numFuncionarios = 0, mesesDesempregado = 0, totalUsuarios = 0, totalBeneficiarios = 0;
+        int mesesDeAuxilio, anoNascimento;
+        int numFuncionarios = 0, mesesDesempregado = 0, totalUsuarios = 0;
         double valorBeneficio;
         char aposentado;
-        String data;
+        String dataNascimento;
+        // String[][] maioresBeneficiarios = {{"", "0"}, {"", "0"}};
 
         Scanner t = new Scanner(System.in);
 
@@ -20,9 +27,9 @@ public class auxilio {
             System.out.println("Nome Completo: ");
             nomeCompleto = t.nextLine();
             System.out.println("Data de Nascimento(Dia/Mês/Ano): ");
-            data = t.nextLine();
+            dataNascimento = t.nextLine();
             // Pega o ano
-            dataNascimento = Integer.parseInt(data.substring(data.lastIndexOf('/') + 1));
+            anoNascimento = Integer.parseInt(dataNascimento.substring(dataNascimento.lastIndexOf('/') + 1));
             System.out.println("Valor do benefício: ");
             valorBeneficio = t.nextDouble();
             t.nextLine(); // Se não colocar isso ele pula o proximo nextLine()
@@ -56,7 +63,7 @@ public class auxilio {
             estado = t.nextLine().toUpperCase();
 
             LocalDate dataAtual = LocalDate.now();
-            if (dataAtual.getYear() - dataNascimento >= 18){
+            if (dataAtual.getYear() - anoNascimento >= 18){
                 System.out.println("Nome: " + nomeCompleto);
                 System.out.println("Data de nascimento: " + dataNascimento);
                 System.out.println("Categoria: " + categoria);
@@ -72,19 +79,18 @@ public class auxilio {
                     }
                 }
 
-                System.out.println(calcularAuxilio(valorBeneficio, categoria, numFuncionarios, estado, dataNascimento));
-                mesesDeAuxilio = calcularMesesDeAuxilio(categoria, dataNascimento);
+                System.out.println(calcularAuxilio(nomeCompleto, valorBeneficio, categoria, numFuncionarios, estado, anoNascimento));
+                mesesDeAuxilio = calcularMesesDeAuxilio(categoria, anoNascimento);
                 if (mesesDeAuxilio > 0) {
                     System.out.println("Receberá o benefício por " + mesesDeAuxilio + " meses");
                 } else {
                     System.out.println("Receberá o benefício por no mínimo 2 até no máximo 12 meses");
                 }
-
-                totalBeneficiarios += 1;
             } else {
                 System.out.println("É menor de 18 anos e não pode receber o benefício");
             }
             totalUsuarios += 1;
+
             System.out.println("Deseja informar um novo beneficiário(S/N)? ");
             opcao = t.next().toUpperCase().charAt(0);
             t.nextLine();
@@ -92,23 +98,48 @@ public class auxilio {
         System.out.println("Total de usúarios: " + totalUsuarios);
         System.out.println("Total de beneficiários: " + totalBeneficiarios);
         System.out.println("Total de valor concedido: R$ " + valorTotal);
+        System.out.println("Nome dos beneficiários que o maior valor: " + nomeMaiorBeneficiario1 + " e " + nomeMaiorBeneficiario2);
     }
 
-    public static String calcularAuxilio(double valorBeneficio, String categoria,
+    public static String calcularAuxilio(String nomeCompleto, double valorBeneficio, String categoria,
                                          int numFuncionarios, String estado, int mesesDesempregado) {
         switch (categoria){
             case "empregado":
                 if (valorBeneficio >= 1000 && valorBeneficio <= 1800){
                     valorBeneficio = moraEmUF(valorBeneficio, estado);
                     valorTotal += valorBeneficio;
+                    if (maioresBeneficiario1(valorBeneficio)) {
+                        if (maiorBeneficiario1 > maiorBeneficiario2) {
+                            nomeMaiorBeneficiario2 = nomeMaiorBeneficiario1;
+                            maiorBeneficiario2 = maiorBeneficiario1;
+                        }
+                        nomeMaiorBeneficiario1 = nomeCompleto;
+                        maiorBeneficiario1 = valorBeneficio;
+                    } else if (maioresBeneficiario2(valorBeneficio)) {
+                        maiorBeneficiario2 = valorBeneficio;
+                        nomeMaiorBeneficiario2 = nomeCompleto;
+                    }
+                    totalBeneficiarios += 1;
                     return "Vai receber o benefício de R$ " + valorBeneficio;
                 } else {
-                    return "O valor do benefício do empregado deve ser entre R$ 1000 e R$ 1800";
+                    return "É preciso recadastrar o usúario, o valor do benefício do empregado deve ser entre R$ 1000 e R$ 1800";
                 }
             case "empregador":
                 valorBeneficio += 200 * numFuncionarios;
                 valorBeneficio = moraEmUF(valorBeneficio, estado);
                 valorTotal += valorBeneficio;
+                if (maioresBeneficiario1(valorBeneficio)) {
+                    if (maiorBeneficiario1 > maiorBeneficiario2) {
+                        nomeMaiorBeneficiario2 = nomeMaiorBeneficiario1;
+                        maiorBeneficiario2 = maiorBeneficiario1;
+                    }
+                    nomeMaiorBeneficiario1 = nomeCompleto;
+                    maiorBeneficiario1 = valorBeneficio;
+                } else if (maioresBeneficiario2(valorBeneficio)) {
+                    maiorBeneficiario2 = valorBeneficio;
+                    nomeMaiorBeneficiario2 = nomeCompleto;
+                }
+                totalBeneficiarios += 1;
                 return "Vai receber o benefício de R$ " + valorBeneficio;
             case "desempregado":
                 if (valorBeneficio >= 1500 && valorBeneficio <= 2300){
@@ -117,9 +148,21 @@ public class auxilio {
                     }
                     valorBeneficio = moraEmUF(valorBeneficio, estado);
                     valorTotal += valorBeneficio;
+                    if (maioresBeneficiario1(valorBeneficio)) {
+                        if (maiorBeneficiario1 > maiorBeneficiario2) {
+                            nomeMaiorBeneficiario2 = nomeMaiorBeneficiario1;
+                            maiorBeneficiario2 = maiorBeneficiario1;
+                        }
+                        nomeMaiorBeneficiario1 = nomeCompleto;
+                        maiorBeneficiario1 = valorBeneficio;
+                    } else if (maioresBeneficiario2(valorBeneficio)) {
+                        maiorBeneficiario2 = valorBeneficio;
+                        nomeMaiorBeneficiario2 = nomeCompleto;
+                    }
+                    totalBeneficiarios += 1;
                     return "Vai receber o benefício de R$ " + valorBeneficio;
                 } else {
-                    return "O valor do benefício do empregado deve ser entre R$ 1500 e R$ 2300";
+                    return "É preciso recadastrar o usúario, o valor do benefício do empregado deve ser entre R$ 1500 e R$ 2300";
                 }
             default:
                 return "Categoria inválida";
@@ -147,6 +190,21 @@ public class auxilio {
             return valorBeneficio * 1.09;
         } else {
             return valorBeneficio;
+        }
+    }
+
+    public static boolean maioresBeneficiario1(double valorBeneficio) {
+        if (valorBeneficio > maiorBeneficiario1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public static boolean maioresBeneficiario2(double valorBeneficio) {
+        if (valorBeneficio > maiorBeneficiario2) {
+            return true;
+        } else {
+            return false;
         }
     }
 }
