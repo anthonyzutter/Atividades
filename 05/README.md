@@ -1,4 +1,4 @@
-# Atividades
+# Avaliação
 ### I - Dados de Entrada do programa:
 * Nome Completo;
 * Data de Nascimento;
@@ -20,12 +20,12 @@
 
 ### III - Regras de negócio Específicas
 
-A - O benefício só será concedido para maiores de 18 anos
-N -  O benefício de pessoas que moram em Santa Catarina terá acréscimo de 5%
-T - O benefício de pessoas que moram no Pará terá acréscimo de 9%
-H - Se estiver desempregado há menos de 6 meses terá uma redução de 10%
-O - O Benefício será de 7 meses para empregadores
-Y - O Benefício será de 5 meses para empregados com mais de 50 anos
+* A - O benefício só será concedido para maiores de 18 anos
+* N -  O benefício de pessoas que moram em Santa Catarina terá acréscimo de 5%
+* T - O benefício de pessoas que moram no Pará terá acréscimo de 9%
+* H - Se estiver desempregado há menos de 6 meses terá uma redução de 10%
+* O - O Benefício será de 7 meses para empregadores
+* Y - O Benefício será de 5 meses para empregados com mais de 50 anos
 
 ### IV - Ao final de cada execução deverá ser impresso os seguintes dados
 * Nome Completo, Data de Nascimento, Categoria, Quais regras foram atendidas (Ex: Usuário é maior de idade, usuário é aposentado então terá um acréscimo de X), por quanto tempo o usuário receberá o benefício e valor do benefício
