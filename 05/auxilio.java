@@ -4,21 +4,19 @@ import java.util.Scanner;
 import java.time.LocalDate;
 
 public class auxilio {
-    private static double valorTotal = 0;
-    private static int totalBeneficiarios = 0;
-    private static double maiorBeneficiario1 = 0;
-    private static double maiorBeneficiario2 = 0;
-    private static String nomeMaiorBeneficiario1 = " ";
-    private static String nomeMaiorBeneficiario2 = " ";
+    public static double valorTotal = 0;
+    public static int totalBeneficiarios = 0;
+    public static double maiorBeneficiario1 = 0;
+    public static double maiorBeneficiario2 = 0;
+    public static String nomeMaiorBeneficiario1 = " ";
+    public static String nomeMaiorBeneficiario2 = " ";
 
     public static void main(String[] args) {
-        String nomeCompleto, categoria, estado;
+        String nomeCompleto, dataNascimento, categoria, estado;
         int mesesDeAuxilio, anoNascimento;
         int numFuncionarios = 0, mesesDesempregado = 0, totalUsuarios = 0;
         double valorBeneficio;
         char aposentado;
-        String dataNascimento;
-        // String[][] maioresBeneficiarios = {{"", "0"}, {"", "0"}};
 
         Scanner t = new Scanner(System.in);
 
@@ -28,7 +26,6 @@ public class auxilio {
             nomeCompleto = t.nextLine();
             System.out.println("Data de Nascimento(Dia/Mês/Ano): ");
             dataNascimento = t.nextLine();
-            // Pega o ano
             anoNascimento = Integer.parseInt(dataNascimento.substring(dataNascimento.lastIndexOf('/') + 1));
             System.out.println("Valor do benefício: ");
             valorBeneficio = t.nextDouble();
@@ -62,8 +59,7 @@ public class auxilio {
             System.out.println("Estado(UF): ");
             estado = t.nextLine().toUpperCase();
 
-            LocalDate dataAtual = LocalDate.now();
-            if (dataAtual.getYear() - anoNascimento >= 18){
+            if (maiorDe18(anoNascimento)){
                 System.out.println("Nome: " + nomeCompleto);
                 System.out.println("Data de nascimento: " + dataNascimento);
                 System.out.println("Categoria: " + categoria);
@@ -92,8 +88,7 @@ public class auxilio {
             totalUsuarios += 1;
 
             System.out.println("Deseja informar um novo beneficiário(S/N)? ");
-            opcao = t.next().toUpperCase().charAt(0);
-            t.nextLine();
+            opcao = t.nextLine().toUpperCase().charAt(0);
         }
         System.out.println("Total de usúarios: " + totalUsuarios);
         System.out.println("Total de beneficiários: " + totalBeneficiarios);
@@ -108,17 +103,7 @@ public class auxilio {
                 if (valorBeneficio >= 1000 && valorBeneficio <= 1800){
                     valorBeneficio = moraEmUF(valorBeneficio, estado);
                     valorTotal += valorBeneficio;
-                    if (maioresBeneficiario1(valorBeneficio)) {
-                        if (maiorBeneficiario1 > maiorBeneficiario2) {
-                            nomeMaiorBeneficiario2 = nomeMaiorBeneficiario1;
-                            maiorBeneficiario2 = maiorBeneficiario1;
-                        }
-                        nomeMaiorBeneficiario1 = nomeCompleto;
-                        maiorBeneficiario1 = valorBeneficio;
-                    } else if (maioresBeneficiario2(valorBeneficio)) {
-                        maiorBeneficiario2 = valorBeneficio;
-                        nomeMaiorBeneficiario2 = nomeCompleto;
-                    }
+                    maioresBeneficiario(valorBeneficio, nomeCompleto);
                     totalBeneficiarios += 1;
                     return "Vai receber o benefício de R$ " + valorBeneficio;
                 } else {
@@ -128,17 +113,7 @@ public class auxilio {
                 valorBeneficio += 200 * numFuncionarios;
                 valorBeneficio = moraEmUF(valorBeneficio, estado);
                 valorTotal += valorBeneficio;
-                if (maioresBeneficiario1(valorBeneficio)) {
-                    if (maiorBeneficiario1 > maiorBeneficiario2) {
-                        nomeMaiorBeneficiario2 = nomeMaiorBeneficiario1;
-                        maiorBeneficiario2 = maiorBeneficiario1;
-                    }
-                    nomeMaiorBeneficiario1 = nomeCompleto;
-                    maiorBeneficiario1 = valorBeneficio;
-                } else if (maioresBeneficiario2(valorBeneficio)) {
-                    maiorBeneficiario2 = valorBeneficio;
-                    nomeMaiorBeneficiario2 = nomeCompleto;
-                }
+                maioresBeneficiario(valorBeneficio, nomeCompleto);
                 totalBeneficiarios += 1;
                 return "Vai receber o benefício de R$ " + valorBeneficio;
             case "desempregado":
@@ -148,17 +123,7 @@ public class auxilio {
                     }
                     valorBeneficio = moraEmUF(valorBeneficio, estado);
                     valorTotal += valorBeneficio;
-                    if (maioresBeneficiario1(valorBeneficio)) {
-                        if (maiorBeneficiario1 > maiorBeneficiario2) {
-                            nomeMaiorBeneficiario2 = nomeMaiorBeneficiario1;
-                            maiorBeneficiario2 = maiorBeneficiario1;
-                        }
-                        nomeMaiorBeneficiario1 = nomeCompleto;
-                        maiorBeneficiario1 = valorBeneficio;
-                    } else if (maioresBeneficiario2(valorBeneficio)) {
-                        maiorBeneficiario2 = valorBeneficio;
-                        nomeMaiorBeneficiario2 = nomeCompleto;
-                    }
+                    maioresBeneficiario(valorBeneficio, nomeCompleto);
                     totalBeneficiarios += 1;
                     return "Vai receber o benefício de R$ " + valorBeneficio;
                 } else {
@@ -183,6 +148,15 @@ public class auxilio {
         }
     }
 
+    public static boolean maiorDe18(int anoNascimento) {
+        LocalDate dataAtual = LocalDate.now();
+        if (dataAtual.getYear() - anoNascimento >= 18){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public static double moraEmUF(double valorBeneficio, String estado) {
         if (estado.equals("SC")) {
             return valorBeneficio * 1.05;
@@ -193,18 +167,17 @@ public class auxilio {
         }
     }
 
-    public static boolean maioresBeneficiario1(double valorBeneficio) {
+    public static void maioresBeneficiario(double valorBeneficio, String nomeCompleto) {
         if (valorBeneficio > maiorBeneficiario1) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    public static boolean maioresBeneficiario2(double valorBeneficio) {
-        if (valorBeneficio > maiorBeneficiario2) {
-            return true;
-        } else {
-            return false;
+            if (maiorBeneficiario1 > maiorBeneficiario2) {
+                nomeMaiorBeneficiario2 = nomeMaiorBeneficiario1;
+                maiorBeneficiario2 = maiorBeneficiario1;
+            }
+            nomeMaiorBeneficiario1 = nomeCompleto;
+            maiorBeneficiario1 = valorBeneficio;
+        } else if (valorBeneficio > maiorBeneficiario2) {
+            maiorBeneficiario2 = valorBeneficio;
+            nomeMaiorBeneficiario2 = nomeCompleto;
         }
     }
 }
