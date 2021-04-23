@@ -10,10 +10,14 @@ public class auxilio {
     public static double maiorBeneficiario2 = 0;
     public static String nomeMaiorBeneficiario1 = " ";
     public static String nomeMaiorBeneficiario2 = " ";
+    public static double tempoMaiorBeneficiario1 = 0;
+    public static double tempoMaiorBeneficiario2 = 0;
+    public static String tempoNomeMaiorBeneficiario1 = " ";
+    public static String tempoNomeMaiorBeneficiario2 = " ";
 
     public static void main(String[] args) {
         String nomeCompleto, dataNascimento, categoria, estado;
-        int mesesDeAuxilio, anoNascimento;
+        int mesesDeAuxilio, anoNascimento, tempoBeneficio;
         int numFuncionarios = 0, mesesDesempregado = 0, totalUsuarios = 0;
         double valorBeneficio;
         char aposentado;
@@ -29,6 +33,15 @@ public class auxilio {
             anoNascimento = Integer.parseInt(dataNascimento.substring(dataNascimento.lastIndexOf('/') + 1));
             System.out.println("Valor do benefício: ");
             valorBeneficio = t.nextDouble();
+            while (true) {
+                System.out.println("Tempo do benefício em meses: ");
+                tempoBeneficio = t.nextInt();
+                if (tempoBeneficio >= 2 && tempoBeneficio <= 12) {
+                    break;
+                } else {
+                    System.out.println("O tempo de benefício deve ser de no mínimo 2 meses até no máximo 12 meses");
+                }
+            }
             t.nextLine(); // Se não colocar isso ele pula o proximo nextLine()
 
             while (true) {
@@ -75,12 +88,14 @@ public class auxilio {
                     }
                 }
 
-                System.out.println(calcularAuxilio(nomeCompleto, valorBeneficio, categoria, numFuncionarios, estado, anoNascimento));
-                mesesDeAuxilio = calcularMesesDeAuxilio(categoria, anoNascimento);
-                if (mesesDeAuxilio > 0) {
-                    System.out.println("Receberá o benefício por " + mesesDeAuxilio + " meses");
+                System.out.println(calcularAuxilio(nomeCompleto, valorBeneficio, categoria, numFuncionarios, estado, anoNascimento, tempoBeneficio));
+                tempoBeneficio = calcularMesesDeAuxilio(categoria, anoNascimento, tempoBeneficio);
+                if (tempoBeneficio == 7) {
+                    System.out.println("O tempo de benefício será de " + tempoBeneficio + " meses porque é empregador");
+                } else if (tempoBeneficio == 5) {
+                    System.out.println("O tempo de benefício será de " + tempoBeneficio + " meses porque é empregado e tem mais de 50 anos");
                 } else {
-                    System.out.println("Receberá o benefício por no mínimo 2 até no máximo 12 meses");
+                    System.out.println("O tempo de benefício será de " + tempoBeneficio + " meses");
                 }
             } else {
                 System.out.println("É menor de 18 anos e não pode receber o benefício");
@@ -94,16 +109,18 @@ public class auxilio {
         System.out.println("Total de beneficiários: " + totalBeneficiarios);
         System.out.println("Total de valor concedido: R$ " + valorTotal);
         System.out.println("Nome dos beneficiários que o maior valor: " + nomeMaiorBeneficiario1 + " e " + nomeMaiorBeneficiario2);
+        System.out.println("Nome dos beneficiários que receberam por mais tempo: " + tempoNomeMaiorBeneficiario1 + " e " + tempoNomeMaiorBeneficiario2);
     }
 
     public static String calcularAuxilio(String nomeCompleto, double valorBeneficio, String categoria,
-                                         int numFuncionarios, String estado, int mesesDesempregado) {
+                                         int numFuncionarios, String estado, int mesesDesempregado, int tempoBeneficio) {
         switch (categoria){
             case "empregado":
                 if (valorBeneficio >= 1000 && valorBeneficio <= 1800){
                     valorBeneficio = moraEmUF(valorBeneficio, estado);
                     valorTotal += valorBeneficio;
-                    maioresBeneficiario(valorBeneficio, nomeCompleto);
+                    maiorBeneficiario(valorBeneficio, nomeCompleto);
+                    maiorTempoDeBeneficio(tempoBeneficio, nomeCompleto);
                     totalBeneficiarios += 1;
                     return "Vai receber o benefício de R$ " + valorBeneficio;
                 } else {
@@ -113,7 +130,8 @@ public class auxilio {
                 valorBeneficio += 200 * numFuncionarios;
                 valorBeneficio = moraEmUF(valorBeneficio, estado);
                 valorTotal += valorBeneficio;
-                maioresBeneficiario(valorBeneficio, nomeCompleto);
+                maiorBeneficiario(valorBeneficio, nomeCompleto);
+                maiorTempoDeBeneficio(tempoBeneficio, nomeCompleto);
                 totalBeneficiarios += 1;
                 return "Vai receber o benefício de R$ " + valorBeneficio;
             case "desempregado":
@@ -123,7 +141,8 @@ public class auxilio {
                     }
                     valorBeneficio = moraEmUF(valorBeneficio, estado);
                     valorTotal += valorBeneficio;
-                    maioresBeneficiario(valorBeneficio, nomeCompleto);
+                    maiorBeneficiario(valorBeneficio, nomeCompleto);
+                    maiorTempoDeBeneficio(tempoBeneficio, nomeCompleto);
                     totalBeneficiarios += 1;
                     return "Vai receber o benefício de R$ " + valorBeneficio;
                 } else {
@@ -134,7 +153,7 @@ public class auxilio {
         }
     }
 
-    public static int calcularMesesDeAuxilio(String categoria, int dataNascimento) {
+    public static int calcularMesesDeAuxilio(String categoria, int dataNascimento, int tempoBeneficio) {
         switch (categoria){
             case "empregador":
                 return 7;
@@ -144,7 +163,7 @@ public class auxilio {
                     return 5;
                 }
             default:
-                return 0;
+                return tempoBeneficio;
         }
     }
 
@@ -167,7 +186,7 @@ public class auxilio {
         }
     }
 
-    public static void maioresBeneficiario(double valorBeneficio, String nomeCompleto) {
+    public static void maiorBeneficiario(double valorBeneficio, String nomeCompleto) {
         if (valorBeneficio > maiorBeneficiario1) {
             if (maiorBeneficiario1 > maiorBeneficiario2) {
                 nomeMaiorBeneficiario2 = nomeMaiorBeneficiario1;
@@ -178,6 +197,20 @@ public class auxilio {
         } else if (valorBeneficio > maiorBeneficiario2) {
             maiorBeneficiario2 = valorBeneficio;
             nomeMaiorBeneficiario2 = nomeCompleto;
+        }
+    }
+
+    public static void maiorTempoDeBeneficio(int tempoBeneficio, String nomeCompleto) {
+        if (tempoBeneficio > tempoMaiorBeneficiario1) {
+            if (tempoMaiorBeneficiario1 > tempoMaiorBeneficiario2) {
+                tempoNomeMaiorBeneficiario2 = tempoNomeMaiorBeneficiario1;
+                tempoMaiorBeneficiario2 = tempoMaiorBeneficiario1;
+            }
+            tempoNomeMaiorBeneficiario1 = nomeCompleto;
+            tempoMaiorBeneficiario1 = tempoBeneficio;
+        } else if (tempoBeneficio > tempoMaiorBeneficiario2) {
+            tempoMaiorBeneficiario2 = tempoBeneficio;
+            tempoNomeMaiorBeneficiario2 = nomeCompleto;
         }
     }
 }

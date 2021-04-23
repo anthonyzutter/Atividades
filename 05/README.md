@@ -3,6 +3,7 @@
 * Nome Completo;
 * Data de Nascimento;
 * Valor do benefício
+* Tempo do benefício em meses
 * Categoria (Empregado, Empregador ou Desempregado)
 	* Empregado
 		* Solicitar se é aposentado
