@@ -36,6 +36,8 @@ public class Ex2 {
                     System.out.println("Caixa " + (i + 1) + ", Altura: " + pilha[i][0] + ", Largura: " +
                             pilha[i][1] + ", Profundidade: " + pilha[i][2] + ", Fragil: " + pilha[i][3]);
                 }
+            } else if (opcao < 1 || opcao > 4) {
+                System.out.println("Opção inválida");
             }
         }
     }
