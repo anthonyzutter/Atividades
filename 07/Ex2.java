@@ -30,12 +30,11 @@ public class Ex2 {
                     if (pilhaVazia()) {
                         System.out.println("Pilha vazia");
                         break;
-                    }
-                    if (pilha[i][0] == null) {
+                    } else if (pilha[i][0] == null) {
                         break;
                     }
-                    System.out.println("Caixa " + (i + 1) + ", Altura: " + pilha[i][0] +
-                            ", Largura: " + pilha[i][1] + ", Profundidade: " + pilha[i][2] + ", Fragil: " + pilha[i][3]);
+                    System.out.println("Caixa " + (i + 1) + ", Altura: " + pilha[i][0] + ", Largura: " +
+                            pilha[i][1] + ", Profundidade: " + pilha[i][2] + ", Fragil: " + pilha[i][3]);
                 }
             }
         }
@@ -48,25 +47,21 @@ public class Ex2 {
         return false;
     }
 
-    public static int tamanhoPilha() {
-        if (pilhaVazia()) {
-            return 0;
-        }
-        return indexPilha + 1;
-    }
-
     public static void empilharCaixa(String[] caixa) {
         if (indexPilha < pilha.length -1) {
             pilha[++indexPilha][0] = caixa[0];
             pilha[indexPilha][1] = caixa[1];
             pilha[indexPilha][2] = caixa[2];
             pilha[indexPilha][3] = caixa[3];
+        } else {
+            System.out.println("Número maximo de caixas empilhadas");
         }
     }
 
     public static String[][] desempilharCaixa() {
         String[][] novaPilha = new String[pilha.length][4];
         if (pilhaVazia()) {
+            System.out.println("Nenhuma caixa para desempilhar");
             return null;
         }
         for (int i = 0; i < pilha.length; i++) {
