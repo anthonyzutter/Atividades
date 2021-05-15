@@ -25,7 +25,7 @@ public class Ex2 {
         }
         for (int i = 0; i < lojas.length; i++) {
             for (int j = 0; j < produtos.length; j++) {
-                if (valores[i][j] < 120) {
+                if (valores[i][j] <= 120) {
                     System.out.println(produtos[j] + " da loja " + lojas[i] + " custa R$ " + valores[i][j]);
                 }
             }
