@@ -11,7 +11,7 @@ public class Ex2 {
         Scanner tc = new Scanner(System.in);
         int opcao = 0;
         while (opcao != 4) {
-            System.out.println("1 - Empilhar caixa, 2 - Desempilhar caixa, 3 - Printar pilha, 4 - Sair");
+            System.out.println("1 - Empilhar caixa, 2 - Desempilhar caixa, 3 - Mostrar pilha, 4 - Sair");
             opcao = Integer.parseInt(tc.nextLine());
             if (opcao == 1) {
                 System.out.println("Altura: ");
@@ -25,17 +25,9 @@ public class Ex2 {
                 empilharCaixa(caixa);
             } else if (opcao == 2) {
                 pilha = desempilharCaixa();
+                System.out.println("Caixa removida");
             } else if (opcao == 3) {
-                for (int i = 0; i < pilha.length; i++) {
-                    if (pilhaVazia()) {
-                        System.out.println("Pilha vazia");
-                        break;
-                    } else if (pilha[i][0] == null) {
-                        break;
-                    }
-                    System.out.println("Caixa " + (i + 1) + ", Altura: " + pilha[i][0] + ", Largura: " +
-                            pilha[i][1] + ", Profundidade: " + pilha[i][2] + ", Fragil: " + pilha[i][3]);
-                }
+                mostrarPilha(pilha);
             } else if (opcao < 1 || opcao > 4) {
                 System.out.println("Opção inválida");
             }
@@ -74,5 +66,18 @@ public class Ex2 {
         }
         indexPilha--;
         return novaPilha;
+    }
+
+    public static void mostrarPilha(String[][] pilha) {
+        for (int i = 0; i < pilha.length; i++) {
+            if (pilhaVazia()) {
+                System.out.println("Pilha vazia");
+                break;
+            } else if (pilha[i][0] == null) {
+                break;
+            }
+            System.out.println("Caixa " + (i + 1) + ", Altura: " + pilha[i][0] + ", Largura: " +
+                    pilha[i][1] + ", Profundidade: " + pilha[i][2] + ", Fragil: " + pilha[i][3]);
+        }
     }
 }

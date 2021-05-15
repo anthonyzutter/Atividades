@@ -11,8 +11,8 @@ public class Ex1 {
         Scanner tc = new Scanner(System.in);
 
         int opcao = 0;
-        while (opcao != 3) {
-            System.out.println("1 - Incluir paciente, 2 - Atender paciente, 3 - Sair");
+        while (opcao != 4) {
+            System.out.println("1 - Incluir paciente, 2 - Atender paciente, 3 - Mostrar fila, 4 - Sair");
             opcao = Integer.parseInt(tc.nextLine());
             if (opcao == 1) {
                 System.out.println("Nome: ");
@@ -26,12 +26,10 @@ public class Ex1 {
                 System.out.println("Qual paciente vai ser atendido? ");
                 index = Integer.parseInt(tc.nextLine()) - 1;
                 pacientes = removerPaciente(pacientes, index);
-            }
-            for (int i = 0; i < pacientes.length; i++) {
-                if (pacientes[i][0] == null) {
-                    continue;
-                }
-                System.out.println("Paciente " + (i + 1) + " - Nome: " + pacientes[i][0] + ", Idade: " + pacientes[i][1]);
+            } else if (opcao == 3) {
+                mostrarFila(pacientes);
+            } else if (opcao < 1 || opcao > 4){
+                System.out.println("Opção inválida");
             }
         }
     }
@@ -65,5 +63,14 @@ public class Ex1 {
         }
         System.out.println("O paciente " + (index + 1) + " foi atendido");
         return pacientesAtualizados;
+    }
+
+    public static void mostrarFila(String[][] pacientes) {
+        for (int i = 0; i < pacientes.length; i++) {
+            if (pacientes[i][0] == null) {
+                continue;
+            }
+            System.out.println("Paciente " + (i + 1) + " - Nome: " + pacientes[i][0] + ", Idade: " + pacientes[i][1]);
+        }
     }
 }
